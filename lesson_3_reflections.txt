@@ -1,1 +1,31 @@
-When would you want to create a remote repository, instead of keeping your work locally?
+When would you want to use a remote repository rather than keeping all your work
+local?
+
+    As backup and for collaboration.
+
+Why might you want to always pull changes manually rather than having Git
+automatically stay up-to-date with your remote repository?
+
+    I want to be in control to decrease chance of code conflicts.
+
+Describe the differences between forks, clones, and branches.  When would you
+use one instead of another?
+
+    Cone - local copy of a repository to work on and periodically synch with the GitHub version.
+    Branch - new code or bug fix to be to be merged with master branch after testing or verification.
+    Fork - a copy of a repository to experiment with.
+
+What is the benefit of having a copy of the last known state of the remote
+stored locally?
+
+    Can use latest code; less chanch of code conflicts, when making changes. 
+
+How would you collaborate without using Git or GitHub?  What would be easier,
+and what would be harder?
+
+    Nothing is easier without version control.
+
+When would you want to make changes in a separate branch rather than directly in
+master?  What benefits does each approach have?
+
+  Always with code. A separate branch allows for testing w/o affecting production code version.
