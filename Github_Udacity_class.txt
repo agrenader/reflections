@@ -1,0 +1,134 @@
+$ git log -n 3 // 3 commits
+$ git log --stat // more details
+$ git diff ID1 ID2 // between 2 commits (ID1 and ID2)
+$ git clone https://github.com/udacity/asteroids.git // clone to current directory project asteroids
+$ git config --global color.ui auto // set colored output
+$ git show <commit> // compare a commit to its parent
+
+$ git checkout <commit> - move HEAD label to the specified commit, updates working directory to the state of that commit.
+<commit> - hash, branch/tag name, relative syntax (HEAD^, HEAD~1). 
+$ git checkout <branch name> makes that branch active. 
+-b: create a new branch based on the current commit and make it active.
+--track: make the checked out branch aware of a remote branch
+--orphan: create a new branch (like with -b) but not be based on any existing commit.
+When <commit> is not a branch head (e.g. git checkout HEAD~2), after checkout you are on a detached HEAD. 
+Once you switch to a different branch, commits created here will not be recoverable and get removed by the garbage collector. 
+
+--- branch & merge ---
+http://git-scm.com/book/ch3-2.html
+
+$ git checkout -b iss53 // switched to a new branch "iss53"
+$ git commit -a -m 'added a new footer [issue 53]' // ag: skip add command by usinf '-a'
+-a, --all // stage modified and deleted files, new files you have not told Git about are not affected.
+$ git checkout master // Now your working directory is exactly the way it was before you started working on issue #53.
+Git won’t let you switch branches if working / staging area has uncommitted changes conflicting with the branch you’re checking out.  
+
+$ git checkout -b hotfix // hotfix branch
+$ vim index.html // use text editor
+$ git commit -a -m 'fixed the broken email address' 
+
+// merge the fix back into your master branch
+$ git checkout master
+$ git merge hotfix
+"Fast-forward" // hotfix branch was directly upstream of the top master commit -> just move master's pointer
+$ git branch -d hotfix // d - delete, no longer need hotfix branch
+
+$ git checkout iss53 // resume work on issue 53
+$ vim index.html
+$ git commit -a -m 'finished the new footer [issue 53]'
+// to put hotfix changes into the iss53 files merge master branch into iss53 branch: 
+$ git merge master
+
+$ git checkout master
+$ git merge iss53
+A three-way merge, using the two snapshots pointed to by the branch tips and the common ancestor of the two. 
+The newly created merge commit has more than one parent.
+$ git branch -d iss53
+
+If hotfix and iss53 changed the same file -> merge conflict:
+$ git merge iss53
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+
+$ git status // -> unmerged files after a merge conflict
+On branch master You have unmerged paths.
+  (fix conflicts and run "git commit")
+Unmerged paths:
+    both modified: index.html
+no changes added to commit
+ 
+// added conflict-resolution markers to the files that have conflicts: 
+<<<<<<< HEAD:index.html
+<div id="footer">contact : email.support@github.com</div>
+=======
+<div id="footer"> please contact us at support@github.com </div>
+>>>>>>> iss53:index.html
+
+Above the ======= the version in HEAD (master branch in this case) 
+The iss53 version is in the bottom part. 
+With 3 points merge, you have 3 sections: each branch HEAD + common ancestor versions. 
+
+After you’ve resolved each of these sections, run 'git add'. Staging the file marks it as resolved.
+
+$ git mergetool // a graphical conflicts resolution tool.
+'git mergetool --tool-help' or 'git help config' for more details.
+
+More advanced tools for resolving tricky merge conflicts are covered in “Advanced Merging”.
+
+----------Class 2
+https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf
+GitHub for Windows htps://windows.github.com
+Git for All Platforms http://git-scm.com
+
+$ git config --global user.name "[name]"
+$ git config --global user.email "[email address]"
+// colorize command line output
+$ git config --global color.ui auto
+
+$ git init [project-name] // Creates a new local repository
+(project-name)$ git clone [url] // Downloads a project and its entire version history
+
+$ git status // all new or modified files to be commited
+$ git add [file] // add to the staging
+$ git reset [file] // Unstages the file
+$ git diff // between working dir and staged (last commit, if not staged)
+$ git diff --staged // between staged and the last commit version
+$ git commit -m "[descriptive message]"
+
+GROUP CHANGES
+$ git branch // local branches [-a] local and remote, [-r] remote branches
+$ git branch [branch-name] // creates a new branch
+$ git checkout [branch-name] // Switches to the branch and updates the working directory
+(checkedout-branch)$ git merge [branch] // merge the [branch] into the checkedout-branch
+$ git branch -d [branch-name] // Deletes the specified branch
+
+Run 'git checkout master' before you commit, in case  you checked out an old commit.
+
+"remote branch" - branch created by other user
+
+$git log --graph --oneline master coins // Visual representation of the commit history; coins - remote branch 
+
+Git merge merges all the specified branches into the currently checked out branch, creating a new commit for that branch.
+The order in which branches are typed into the command line does not matter. 
+
+If you get a CONFLICT message:
+1. $ git merge --abort // Restore your files to their state before you started the merge
+2. Check the state of your files. 
+Check indentation- only spaces (no tabs), newline on Windows (CRLF or \r\n) vs Unix/MACOS (LF)
+$git config --global core.autocrlf true // on Windows to take care about newline conflicts
+https://help.github.com/articles/dealing-with-line-endings/#platform-all
+3. Once your file is in the correct state, create a new commit with your changes.
+4. Try the merge again.
+
+git reset --soft HEAD~1 // to uncommit; refer to <commit> you want to reset to.
+--soft // delete the commit but leave all your changes, "Changes to be committed" status.
+-- hard // get rid of any changes to tracked files in the working tree
+$ git revert // if you already pushed and someone pulled 
+$ git revert HEAD // create a new commit that reverses everything introduced by the accidental commit.
+
+Merge master into a branch every day - less conflicts to resolve.
+
+----Lesson 3 ---
+$ git push <commit> // to a GitHub repository from local
+$ git pull <commit>
